@@ -3,84 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Catálogo Dinâmico</title>
+  <title>Catálogo Integrado com Google Sheets</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
+    :root {
+      --primary-color: #121212;
+      --secondary-color: #1e1e1e;
+      --accent-color: #ff5252;
+      --text-color: #ddd;
+      --card-bg: #222;
+      --border-color: #333;
+    }
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     header {
-      background: #333;
-      color: #fff;
-      padding: 1rem;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2rem 1rem;
       text-align: center;
     }
+    header h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
     .filtros {
+      background-color: var(--primary-color);
+      padding: 1.5rem 1rem;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
       gap: 1rem;
-      padding: 1rem;
-      background: #fff;
+      border-bottom: 1px solid var(--border-color);
+      align-items: center;
     }
-    .filtros input,
-    .filtros select {
-      padding: 0.5rem;
+    .search-wrapper {
+      position: relative;
+      width: 300px;
+      max-width: 100%;
+    }
+    .search-wrapper input[type="search"] {
+      width: 100%;
+      padding: 10px 40px 10px 12px;
       font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      outline: none;
+      color: var(--text-color);
+      background-color: var(--secondary-color);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .search-wrapper input[type="search"]::placeholder {
+      color: #777;
+    }
+    .search-wrapper input[type="search"]:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 6px var(--accent-color);
+    }
+    .search-wrapper svg {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      stroke: #777;
+      pointer-events: none;
+      transition: stroke 0.3s ease;
+    }
+    .search-wrapper input[type="search"]:focus + svg {
+      stroke: var(--accent-color);
+    }
+    .filtros select {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      min-width: 180px;
+      background: var(--secondary-color);
+      color: var(--text-color);
+      transition: border-color 0.3s ease;
+    }
+    .filtros select:focus {
+      border-color: var(--accent-color);
+      outline: none;
+      box-shadow: 0 0 6px var(--accent-color);
     }
     .catalogo {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
       padding: 2rem;
+      flex-grow: 1;
+      background-color: var(--secondary-color);
     }
     .produto {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      transition: transform 0.2s;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid var(--border-color);
     }
     .produto:hover {
-      transform: scale(1.02);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(255, 82, 82, 0.7);
+      border-color: var(--accent-color);
     }
     .produto a {
-      display: block;
-      text-decoration: none;
       color: inherit;
-      padding: 1rem;
+      text-decoration: none;
+      display: block;
+      height: 100%;
     }
     .produto img {
-      max-width: 100%;
-      border-radius: 5px;
-      height: 180px;
+      width: 100%;
+      height: 220px;
       object-fit: contain;
-      background: #f0f0f0;
-      margin-bottom: 0.5rem;
+      background-color: #FFFFFF;
+      display: block;
+      border-radius: 12px 12px 0 0;
     }
-    .produto h2 {
-      margin: 0.5rem 0;
-      font-size: 1.2rem;
+    .produto h2, .produto h3 {
+      font-size: 1.1rem;
+      padding: 1rem 1rem 0 1rem;
+      color: var(--text-color);
     }
     .produto p {
-      margin: 0.2rem 0;
-      color: #555;
+      padding: 0 1rem 1rem 1rem;
+      color: #aaa;
     }
     .produto .preco {
-      color: #009688;
+      padding: 0 1rem 1rem 1rem;
       font-weight: bold;
-      margin-top: 0.5rem;
-      font-size: 1.1rem;
+      color: var(--accent-color);
+      font-size: 1.2rem;
     }
     footer {
-      text-align: center;
+      background-color: var(--primary-color);
+      color: white;
       padding: 1rem;
-      background: #333;
-      color: #fff;
-      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
     }
-
-    /* Botão WhatsApp flutuante com animação */
+    #debug {
+      display: none;
+    }
     .whatsapp-float {
       position: fixed;
       bottom: 20px;
@@ -88,7 +167,6 @@
       z-index: 999;
       animation: flutuar 2.5s ease-in-out infinite;
     }
-
     .whatsapp-float img {
       width: 60px;
       height: 60px;
@@ -96,11 +174,9 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       transition: transform 0.3s ease;
     }
-
     .whatsapp-float img:hover {
       transform: scale(1.1);
     }
-
     @keyframes flutuar {
       0%, 100% {
         transform: translateY(0);
@@ -112,129 +188,131 @@
   </style>
 </head>
 <body>
+  <header>
+    <h1>Catálogo de Produtos</h1>
+  </header>
 
-<header><h1>Catálogo Dinâmico</h1></header>
+  <section class="filtros">
+    <div class="search-wrapper">
+      <input id="busca" type="search" placeholder="Procure pelo nome de seu produto" aria-label="Pesquisar" autocomplete="off" />
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </div>
 
-<section class="filtros">
-  <input id="busca" type="text" placeholder="Buscar por nome..." autocomplete="off" />
-  <select id="categoria">
-    <option value="">Todas categorias</option>
-  </select>
-  <select id="preco">
-    <option value="">Todos os preços</option>
-    <option value="0-100">Até R$100</option>
-    <option value="100-200">R$100 a R$200</option>
-    <option value="200-9999">Acima de R$200</option>
-  </select>
-</section>
+    <select id="categoria">
+      <option value="">Todas categorias</option>
+    </select>
+    <select id="preco">
+      <option value="">Todos os preços</option>
+      <option value="0-100">Até R$100</option>
+      <option value="100-200">R$100 a R$200</option>
+      <option value="200-99999">Acima de R$200</option>
+    </select>
+  </section>
 
-<section id="catalogo" class="catalogo"></section>
+  <section id="catalogo" class="catalogo"></section>
 
-<footer>&copy; 2025 Catálogo Dinâmico</footer>
+  <footer>
+    <p>Caso tenha interesse em algum produto que não está no catálogo, nos contate!</p>
+    <p>&copy; 2025 Catálogo</p>
+  </footer>
 
-<!-- Botão WhatsApp flutuante -->
-<div class="whatsapp-float">
-  <a href="https://wa.me/5511958105948" target="_blank" aria-label="Fale conosco pelo WhatsApp">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/WhatsApp_icon.png" alt="WhatsApp" />
-  </a>
-</div>
+  <div class="whatsapp-float">
+    <a href="https://wa.me/5511958105948" target="_blank" aria-label="Fale conosco pelo WhatsApp">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/WhatsApp_icon.png" alt="WhatsApp" />
+    </a>
+  </div>
 
-<script>
-  const spreadsheetId = '1yJqq-aL5oUnBtxb93bJy2JwLx3ccwuaoQz_UbHAI5_s';
-  const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json`;
+  <script>
+    const spreadsheetId = '1yJqq-aL5oUnBtxb93bJy2JwLx3ccwuaoQz_UbHAI5_s';
+    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json`;
 
-  let produtos = [];
+    let produtos = [];
+    let colIndex = {}; // objeto para mapear nome da coluna -> índice
 
-  fetch(url)
-    .then(res => res.text())
-    .then(txt => {
-      // Extrai o JSON do retorno da Google Sheets API
-      const json = JSON.parse(txt.match(/(?<=\().*(?=\);)/s)[0]);
-      const cols = json.table.cols.map(c => c.label);
+    fetch(url)
+      .then(res => res.text())
+      .then(txt => {
+        // Extrair JSON dentro do callback
+        const jsonStr = txt.match(/(?<=\().*(?=\);)/s)[0];
+        const json = JSON.parse(jsonStr);
 
-      // Pula a primeira linha (títulos) e mapeia cada linha para objeto produto
-      produtos = json.table.rows.slice(1).map(row => {
-        const obj = {};
-        row.c.forEach((cell, i) => {
-          obj[cols[i]] = cell?.v || '';
+        const cols = json.table.cols.map(c => c.label.trim().toLowerCase());
+        // Criar mapa coluna -> índice
+        cols.forEach((colName, i) => {
+          colIndex[colName] = i;
         });
-        return {
-          nome: obj['nome'] || obj['Nome'] || '',
-          categoria: obj['categoria'] || obj['Categoria'] || '',
-          preco: obj['preço'] || obj['Preço'] || '0',
-          link: obj['link'] || obj['Link'] || '#',
-          imagem: obj['imagem'] || obj['Imagem'] || ''
-        };
+
+        // Ignorar primeira linha (cabeçalho) e mapear o resto
+        produtos = json.table.rows.slice(1).map(row => {
+          const c = row.c;
+          return {
+            nome: c[colIndex['nome']]?.v || '',
+            categoria: c[colIndex['categoria']]?.v || '',
+            preco: c[colIndex['preço']]?.v || '0',
+            link: c[colIndex['link']]?.v || '#',
+            imagem: c[colIndex['imagem']]?.v || ''
+          };
+        });
+
+        populaCategorias();
+        renderProdutos(produtos);
+      })
+      .catch(console.error);
+
+    const catalogoEl = document.getElementById('catalogo');
+    const buscaEl = document.getElementById('busca');
+    const categoriaEl = document.getElementById('categoria');
+    const precoEl = document.getElementById('preco');
+
+    function populaCategorias() {
+      const cats = [...new Set(produtos.map(p => p.categoria).filter(Boolean))];
+      cats.forEach(cat => {
+        const op = document.createElement('option');
+        op.value = op.textContent = cat;
+        categoriaEl.appendChild(op);
       });
-
-      populaCategorias();
-      renderProdutos(produtos);
-    })
-    .catch(err => {
-      console.error('Erro ao carregar a planilha:', err);
-      document.getElementById('catalogo').innerHTML = '<p>Erro ao carregar os produtos.</p>';
-    });
-
-  const catalogoEl = document.getElementById('catalogo');
-  const buscaEl = document.getElementById('busca');
-  const categoriaEl = document.getElementById('categoria');
-  const precoEl = document.getElementById('preco');
-
-  function populaCategorias() {
-    const categorias = [...new Set(produtos.map(p => p.categoria).filter(c => c))];
-    categorias.sort();
-    categorias.forEach(cat => {
-      const option = document.createElement('option');
-      option.value = option.textContent = cat;
-      categoriaEl.appendChild(option);
-    });
-  }
-
-  function renderProdutos(lista) {
-    if (lista.length === 0) {
-      catalogoEl.innerHTML = '<p>Nenhum produto encontrado.</p>';
-      return;
     }
-    catalogoEl.innerHTML = lista.map(p => `
-      <div class="produto">
-        <a href="${p.link}" target="_blank" rel="noopener noreferrer">
-          <img src="${p.imagem}" alt="${p.nome}" />
-          <h2>${p.nome}</h2>
-          <p>${p.categoria}</p>
-          <div class="preco">R$ ${Number(p.preco).toFixed(2)}</div>
-        </a>
-      </div>
-    `).join('');
-  }
 
-  function filtrar() {
-    const busca = buscaEl.value.toLowerCase();
-    const cat = categoriaEl.value;
-    const pr = precoEl.value;
+    function renderProdutos(lista) {
+      catalogoEl.innerHTML = lista.length
+        ? lista.map(p => `
+          <div class="produto">
+            <a href="${p.link}" target="_blank" rel="noopener noreferrer">
+              <img src="${p.imagem}" alt="${p.nome}" />
+              <h2>${p.nome}</h2>
+              <p>${p.categoria}</p>
+              <div class="preco">R$ ${Number(p.preco).toFixed(2)}</div>
+            </a>
+          </div>
+        `).join('')
+        : '<p>Nenhum produto encontrado.</p>';
+    }
 
-    let resultado = produtos.filter(p => {
-      const nomeLower = p.nome.toLowerCase();
-      const precoNum = Number(p.preco);
+    function filtrar() {
+      const b = buscaEl.value.toLowerCase();
+      const c = categoriaEl.value;
+      const pr = precoEl.value;
 
-      const buscaOk = nomeLower.includes(busca);
-      const categoriaOk = cat === '' || p.categoria === cat;
+      let filtrados = produtos.filter(p =>
+        p.nome.toLowerCase().includes(b) &&
+        (c === '' || p.categoria === c)
+      );
 
-      let precoOk = true;
       if (pr) {
         const [min, max] = pr.split('-').map(Number);
-        precoOk = precoNum >= min && precoNum <= max;
+        filtrados = filtrados.filter(p => Number(p.preco) >= min && Number(p.preco) <= max);
       }
 
-      return buscaOk && categoriaOk && precoOk;
-    });
+      renderProdutos(filtrados);
+    }
 
-    renderProdutos(resultado);
-  }
-
-  buscaEl.addEventListener('input', filtrar);
-  categoriaEl.addEventListener('change', filtrar);
-  precoEl.addEventListener('change', filtrar);
-</script>
-
+    buscaEl.addEventListener('input', filtrar);
+    categoriaEl.addEventListener('change', filtrar);
+    precoEl.addEventListener('change', filtrar);
+  </script>
 </body>
 </html>
