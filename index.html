@@ -13,11 +13,13 @@
       --card-bg: #222;
       --border-color: #333;
     }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: var(--secondary-color);
@@ -27,69 +29,18 @@
       display: flex;
       flex-direction: column;
     }
+
     header {
       background-color: var(--primary-color);
       color: white;
       padding: 2rem 1rem;
       text-align: center;
     }
+
     header h1 {
       font-size: 2rem;
       font-weight: 600;
       letter-spacing: 1px;
-    }
-
-    /* 🔽 Carrossel */
-    .banner-carrossel {
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-      max-height: 400px;
-    }
-    .banner-carrossel .slides {
-      display: flex;
-      width: 300%;
-      animation: slideBanner 12s infinite;
-    }
-    .banner-carrossel:hover .slides {
-      animation-play-state: paused;
-    }
-    .banner-carrossel img {
-      width: 100%;
-      object-fit: cover;
-    }
-    @keyframes slideBanner {
-      0% { transform: translateX(0); }
-      33% { transform: translateX(-100%); }
-      66% { transform: translateX(-200%); }
-      100% { transform: translateX(0); }
-    }
-
-    /* 🔽 Barra de categorias */
-    .barra-categorias {
-      display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      gap: 0.5rem;
-      padding: 1rem;
-      background-color: var(--primary-color);
-      border-bottom: 1px solid var(--border-color);
-    }
-    .barra-categorias button {
-      flex: 0 0 auto;
-      background: var(--secondary-color);
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s, border-color 0.3s;
-    }
-    .barra-categorias button:hover,
-    .barra-categorias button.ativa {
-      background-color: var(--accent-color);
-      border-color: var(--accent-color);
-      color: white;
     }
 
     .filtros {
@@ -102,11 +53,13 @@
       border-bottom: 1px solid var(--border-color);
       align-items: center;
     }
+
     .search-wrapper {
       position: relative;
       width: 300px;
       max-width: 100%;
     }
+
     .search-wrapper input[type="search"] {
       width: 100%;
       padding: 10px 40px 10px 12px;
@@ -118,13 +71,16 @@
       background-color: var(--secondary-color);
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
+
     .search-wrapper input[type="search"]::placeholder {
       color: #777;
     }
+
     .search-wrapper input[type="search"]:focus {
       border-color: var(--accent-color);
       box-shadow: 0 0 6px var(--accent-color);
     }
+
     .search-wrapper svg {
       position: absolute;
       right: 12px;
@@ -136,9 +92,11 @@
       pointer-events: none;
       transition: stroke 0.3s ease;
     }
+
     .search-wrapper input[type="search"]:focus + svg {
       stroke: var(--accent-color);
     }
+
     .filtros select {
       padding: 0.75rem 1rem;
       font-size: 1rem;
@@ -149,14 +107,123 @@
       color: var(--text-color);
       transition: border-color 0.3s ease;
     }
+
     .filtros select:focus {
+      border-color: var(--accent-color);
+      outline: none;
+      box-shadow: 0 0 6px var(--accent-color);
+    }
+
+    .catalogo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      flex-grow: 1;
+      background-color: var(--secondary-color);
+    }
+
+    .produto {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+
+    .produto:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(255, 82, 82, 0.7);
       border-color: var(--accent-color);
     }
 
-    /* 🔽 Responsividade para o Carrossel */
-    @media (max-width: 768px) {
-      .banner-carrossel .slides {
-        flex-direction: column;
+    .produto a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      height: 100%;
+    }
+
+    .produto img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      background-color: #FFFFFF;
+      display: block;
+      border-radius: 12px 12px 0 0;
+    }
+
+    .produto h2, .produto h3 {
+      font-size: 1.1rem;
+      padding: 1rem 1rem 0 1rem;
+      color: var(--text-color);
+    }
+
+    .produto p {
+      padding: 0 1rem 1rem 1rem;
+      color: #aaa;
+    }
+
+    .produto .preco {
+      padding: 0 1rem 1rem 1rem;
+      font-weight: bold;
+      color: var(--accent-color);
+      font-size: 1.2rem;
+    }
+
+    .produto.esgotado {
+      opacity: 0.5;
+      filter: grayscale(100%);
+      pointer-events: none;
+    }
+
+    .tag-esgotado {
+      background-color: var(--accent-color);
+      color: white;
+      font-weight: bold;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      display: inline-block;
+      margin: 0.5rem 1rem 1rem;
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      animation: flutuar 2.5s ease-in-out infinite;
+    }
+
+    .whatsapp-float img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-float img:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes flutuar {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px);
       }
     }
   </style>
@@ -166,32 +233,126 @@
     <h1>Catálogo de Produtos</h1>
   </header>
 
-  <section class="banner-carrossel">
-    <div class="slides">
-      <img src="banner1.jpg" alt="Banner 1">
-      <img src="banner2.jpg" alt="Banner 2">
-      <img src="banner3.jpg" alt="Banner 3">
-    </div>
-  </section>
-
-  <div class="barra-categorias" id="barra-categorias">
-    <!-- Botões de categorias serão gerados dinamicamente -->
-  </div>
-
-  <div class="filtros">
+  <section class="filtros">
     <div class="search-wrapper">
-      <input type="search" id="input-search" placeholder="Buscar produtos..." />
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M10 18C14.9706 18 19 13.9706 19 10C19 6.02944 14.9706 2 10 2C5.02944 2 1 6.02944 1 10C1 13.9706 5.02944 18 10 18Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        <path d="M21 21L15 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <input id="busca" type="search" placeholder="Procure pelo nome de seu produto" aria-label="Pesquisar" autocomplete="off" />
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
       </svg>
     </div>
-    <select id="categoriaFiltro">
-      <option value="">Todas as Categorias</option>
-      <!-- Opções de categorias serão geradas dinamicamente -->
+
+    <select id="categoria">
+      <option value="">Todas categorias</option>
     </select>
+    <select id="preco">
+      <option value="">Todos os preços</option>
+      <option value="0-100">Até R$100</option>
+      <option value="100-200">R$100 a R$200</option>
+      <option value="200-99999">Acima de R$200</option>
+    </select>
+  </section>
+
+  <section id="catalogo" class="catalogo"></section>
+
+  <footer>
+    <p>Caso tenha interesse em algum produto que não está no catálogo, nos contate!</p>
+    <p>&copy; 2025 Catálogo</p>
+  </footer>
+
+  <div class="whatsapp-float">
+    <a href="https://wa.me/5511958105948" target="_blank" aria-label="Fale conosco pelo WhatsApp">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/WhatsApp_icon.png" alt="WhatsApp" />
+    </a>
   </div>
 
-  <script src="app.js"></script>
+  <script>
+    const spreadsheetId = '1yJqq-aL5oUnBtxb93bJy2JwLx3ccwuaoQz_UbHAI5_s';
+    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json`;
+
+    let produtos = [];
+    let colIndex = {};
+
+    fetch(url)
+      .then(res => res.text())
+      .then(txt => {
+        const jsonStr = txt.match(/(?<=\().*(?=\);)/s)[0];
+        const json = JSON.parse(jsonStr);
+
+        const cols = json.table.cols.map(c => c.label.trim().toLowerCase());
+        cols.forEach((colName, i) => {
+          colIndex[colName] = i;
+        });
+
+        produtos = json.table.rows.slice(1).map(row => {
+          const c = row.c;
+          return {
+            nome: c[colIndex['nome']]?.v || '',
+            categoria: c[colIndex['categoria']]?.v || '',
+            preco: c[colIndex['preço']]?.v || '0',
+            link: c[colIndex['link']]?.v || '#',
+            imagem: c[colIndex['imagem']]?.v || '',
+            ativo: c[colIndex['ativo']]?.v ?? true
+          };
+        });
+
+        populaCategorias();
+        renderProdutos(produtos);
+      })
+      .catch(console.error);
+
+    const catalogoEl = document.getElementById('catalogo');
+    const buscaEl = document.getElementById('busca');
+    const categoriaEl = document.getElementById('categoria');
+    const precoEl = document.getElementById('preco');
+
+    function populaCategorias() {
+      const cats = [...new Set(produtos.map(p => p.categoria).filter(Boolean))];
+      cats.forEach(cat => {
+        const op = document.createElement('option');
+        op.value = op.textContent = cat;
+        categoriaEl.appendChild(op);
+      });
+    }
+
+    function renderProdutos(lista) {
+      catalogoEl.innerHTML = lista.length
+        ? lista.map(p => `
+          <div class="produto ${p.ativo === true || p.ativo === 'TRUE' ? '' : 'esgotado'}">
+            <a href="${p.link}" target="_blank" rel="noopener noreferrer">
+              <img src="${p.imagem}" alt="${p.nome}" />
+              <h2>${p.nome}</h2>
+              <p>${p.categoria}</p>
+              <div class="preco">R$ ${Number(p.preco).toFixed(2)}</div>
+              ${p.ativo === true || p.ativo === 'TRUE' ? '' : '<span class="tag-esgotado">Esgotado</span>'}
+            </a>
+          </div>
+        `).join('')
+        : '<p>Nenhum produto encontrado.</p>';
+    }
+
+    function filtrar() {
+      const b = buscaEl.value.toLowerCase();
+      const c = categoriaEl.value;
+      const pr = precoEl.value;
+
+      let filtrados = produtos.filter(p =>
+        p.nome.toLowerCase().includes(b) &&
+        (c === '' || p.categoria === c)
+      );
+
+      if (pr) {
+        const [min, max] = pr.split('-').map(Number);
+        filtrados = filtrados.filter(p => Number(p.preco) >= min && Number(p.preco) <= max);
+      }
+
+      renderProdutos(filtrados);
+    }
+
+    buscaEl.addEventListener('input', filtrar);
+    categoriaEl.addEventListener('change', filtrar);
+    precoEl.addEventListener('change', filtrar);
+  </script>
 </body>
 </html>
