@@ -284,9 +284,9 @@
       catalogoEl.innerHTML = lista.length
         ? lista.map(p => {
             let status = (p.ativo || '').toString().trim().toUpperCase();
-            let isAtivo = status === 'TRUE';
-            let isEsgotado = status === 'FALSE' || status === '';
             let isOff = status.startsWith('OFF');
+            let isEsgotado = status === 'FALSE' || status === '';
+            let isAtivo = status === 'TRUE' || isOff;
 
             let desconto = 0;
             if (isOff) {
@@ -349,3 +349,4 @@
   </script>
 </body>
 </html>
+
