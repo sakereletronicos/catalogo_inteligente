@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Catálogo com Descontos</title>
+  <title>Catálogo Digital</title>
   <style>
     :root {
       --primary-color: #121212;
@@ -13,173 +13,295 @@
       --card-bg: #222;
       --border-color: #333;
     }
-    body {
-      font-family: sans-serif;
-      background-color: var(--secondary-color);
-      color: var(--text-color);
+
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--secondary-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Novo Header estilo mobile Loja Tomate */
+    .topbar {
+      background-color: var(--primary-color);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    .topbar .logo {
+      font-size: 1.4rem;
+      color: white;
+      font-weight: bold;
+      margin: 0;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .menu-icon,
+    .cart-icon {
+      font-size: 1.5rem;
+      color: white;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
     header {
-      padding: 1rem;
-      background: var(--primary-color);
+      padding: 2rem 1rem;
       text-align: center;
     }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .filtros {
+      background-color: var(--primary-color);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      align-items: center;
+    }
+
+    .search-wrapper {
+      position: relative;
+      width: 300px;
+      max-width: 100%;
+    }
+
+    .search-wrapper input[type="search"] {
+      width: 100%;
+      padding: 10px 40px 10px 12px;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      outline: none;
+      color: var(--text-color);
+      background-color: var(--secondary-color);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .search-wrapper input[type="search"]::placeholder {
+      color: #777;
+    }
+
+    .search-wrapper input[type="search"]:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 6px var(--accent-color);
+    }
+
+    .search-wrapper svg {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      stroke: #777;
+      pointer-events: none;
+      transition: stroke 0.3s ease;
+    }
+
+    .search-wrapper input[type="search"]:focus + svg {
+      stroke: var(--accent-color);
+    }
+
+    .filtros select {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      min-width: 180px;
+      background: var(--secondary-color);
+      color: var(--text-color);
+      transition: border-color 0.3s ease;
+    }
+
+    .filtros select:focus {
+      border-color: var(--accent-color);
+      outline: none;
+      box-shadow: 0 0 6px var(--accent-color);
+    }
+
     .catalogo {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
       padding: 2rem;
+      flex-grow: 1;
+      background-color: var(--secondary-color);
     }
+
     .produto {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
       border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
       overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid var(--border-color);
       position: relative;
-      transition: transform 0.3s ease;
     }
+
     .produto:hover {
       transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(255, 82, 82, 0.7);
       border-color: var(--accent-color);
     }
-    .produto.esgotado {
-      opacity: 0.5;
-      pointer-events: none;
+
+    .produto a {
+      color: inherit;
+      text-decoration: none;
+      display: block;
+      height: 100%;
     }
+
     .produto img {
       width: 100%;
       height: 220px;
       object-fit: contain;
-      background: #fff;
+      background-color: #FFFFFF;
+      display: block;
+      border-radius: 12px 12px 0 0;
     }
-    .produto h2, .produto p {
-      padding: 0 1rem;
+
+    .produto h2, .produto h3 {
+      font-size: 1.1rem;
+      padding: 1rem 1rem 0 1rem;
+      color: var(--text-color);
     }
-    .preco {
-      padding: 1rem;
+
+    .produto p {
+      padding: 0 1rem 1rem 1rem;
+      color: #aaa;
+    }
+
+    .produto .preco {
+      padding: 0 1rem 1rem 1rem;
+      font-weight: bold;
+      color: var(--accent-color);
       font-size: 1.2rem;
     }
-    .preco-original {
-      text-decoration: line-through;
-      color: #999;
-      margin-right: 0.5rem;
+
+    .produto.esgotado {
+      opacity: 0.5;
+      filter: grayscale(100%);
+      pointer-events: none;
     }
-    .preco-desconto {
-      color: var(--accent-color);
+
+    .tag-esgotado {
+      background-color: var(--accent-color);
+      color: white;
       font-weight: bold;
-    }
-    .tag-esgotado, .tag-desconto {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: var(--accent-color);
-      color: #fff;
       padding: 0.3rem 0.6rem;
-      font-size: 0.75rem;
-      font-weight: bold;
-      border-radius: 5px;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      display: inline-block;
+      margin: 0.5rem 1rem 1rem;
     }
-    .tag-desconto {
-      background: #4caf50;
+
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      animation: flutuar 2.5s ease-in-out infinite;
+    }
+
+    .whatsapp-float img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-float img:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes flutuar {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* Responsividade para dispositivos menores */
+    @media (max-width: 768px) {
+      .filtros {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1rem;
+      }
+
+      .search-wrapper {
+        width: 100%;
+      }
+
+      .catalogo {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+
+      .produto img {
+        height: 180px;
+      }
+
+      .topbar {
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+      }
+
+      .topbar .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>Catálogo de Produtos</h1>
+  <header class="topbar">
+    <button class="menu-icon" aria-label="Menu">&#9776;</button>
+    <h1 class="logo">Catálogo</h1>
+    <button class="cart-icon" aria-label="Carrinho">🛒</button>
   </header>
 
-  <section id="catalogo" class="catalogo"></section>
-
-  <script>
-    const spreadsheetId = '1yJqq-aL5oUnBtxb93bJy2JwLx3ccwuaoQz_UbHAI5_s';
-    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json`;
-
-    let produtos = [];
-    let colIndex = {};
-
-    fetch(url)
-      .then(res => res.text())
-      .then(txt => {
-        const jsonStr = txt.match(/(?<=\\().*(?=\\);)/s)[0];
-        const json = JSON.parse(jsonStr);
-        const cols = json.table.cols.map(c => c.label.trim().toLowerCase());
-        cols.forEach((col, i) => colIndex[col] = i);
-
-        produtos = json.table.rows.slice(1).map(row => {
-          const c = row.c;
-          return {
-            nome: c[colIndex['nome']]?.v || '',
-            categoria: c[colIndex['categoria']]?.v || '',
-            preco: parseFloat(c[colIndex['preço']]?.v || '0'),
-            link: c[colIndex['link']]?.v || '#',
-            imagem: c[colIndex['imagem']]?.v || '',
-            ativo: (c[colIndex['ativo']]?.v || '').toString().trim().toUpperCase()
-          };
-        });
-
-        renderProdutos(produtos);
-      })
-      .catch(console.error);
-
-    function renderProdutos(lista) {
-      const catalogo = document.getElementById('catalogo');
-      catalogo.innerHTML = '';
-
-      lista.forEach(p => {
-        const status = p.ativo;
-        const isOff = status.startsWith('OFF');
-        const isEsgotado = status === 'FALSE' || status === '';
-        const isAtivo = status === 'TRUE' || isOff;
-
-        let desconto = 0;
-        if (isOff) {
-          const match = status.match(/OFF\s*(\d+)/);
-          if (match) {
-            desconto = parseInt(match[1]);
-          }
-        }
-
-        const precoOriginal = p.preco;
-        const precoComDesconto = desconto > 0 ? precoOriginal * (1 - desconto / 100) : precoOriginal;
-
-        if (!isAtivo) return; // Oculta produtos não ativos nem esgotados nem com OFF
-
-        const card = document.createElement('div');
-        card.className = 'produto' + (isEsgotado ? ' esgotado' : '');
-
-        card.innerHTML = `
-          <a href="${isEsgotado ? '#' : p.link}" target="_blank">
-            <img src="${p.imagem}" alt="${p.nome}">
-            <h2>${p.nome}</h2>
-            <p>${p.categoria}</p>
-            <div class="preco">
-              ${
-                desconto > 0
-                  ? `<span class="preco-original">R$ ${precoOriginal.toFixed(2)}</span>
-                     <span class="preco-desconto">R$ ${precoComDesconto.toFixed(2)}</span>`
-                  : `R$ ${precoOriginal.toFixed(2)}`
-              }
-            </div>
-            ${
-              isEsgotado
-                ? `<span class="tag-esgotado">Esgotado</span>`
-                : desconto > 0
-                  ? `<span class="tag-desconto">-${desconto}%</span>`
-                  : ''
-            }
-          </a>
-        `;
-
-        catalogo.appendChild(card);
-      });
-
-      if (!catalogo.innerHTML) {
-        catalogo.innerHTML = '<p style="text-align:center;">Nenhum produto ativo.</p>';
-      }
-    }
-  </script>
-</body>
-</html>
+  <section class="filtros">
+    <div class="search-wrapper">
+      <input id="busca" type="search" placeholder="Procure pelo nome de seu produto" aria-label="Pesquisar" autocomplete="off" />
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width
