@@ -321,22 +321,24 @@
       });
     }
 
-    function renderProdutos(lista) {
-      catalogoEl.innerHTML = lista.length
-        ? lista.map(p => `
-          <div class="produto ${p.ativo === true || p.ativo === 'TRUE' ? '' : 'esgotado'}">
-            <a href="${p.link}" target="_blank" rel="noopener noreferrer">
-              <img src="${p.imagem}" alt="${p.nome}" />
-              <h2>${p.nome}</h2>
-              <p>${p.categoria}</p>
-              <div class="preco">R$ ${Number(p.preco).toFixed(2)}</div>
-              ${p.desconto ? `<span class="tag-desconto">${p.desconto}% OFF</span>` : ''}
-              ${p.ativo === true || p.ativo === 'TRUE' ? '' : '<span class="tag-esgotado">Esgotado</span>'}
-            </a>
+   function renderProdutos(lista) {
+  catalogoEl.innerHTML = lista.length
+    ? lista.map(p => `
+      <div class="produto ${p.ativo === true || p.ativo === 'TRUE' ? '' : 'esgotado'}">
+        <a href="${p.link}" target="_blank" rel="noopener noreferrer">
+          <img src="${p.imagem}" alt="${p.nome}" />
+          <h2>${p.nome}</h2>
+          <p>${p.categoria}</p>
+          <div class="preco-desconto">
+            <div class="preco">R$ ${Number(p.preco).toFixed(2)}</div>
+            ${p.desconto ? `<span class="tag-desconto">${p.desconto}% OFF</span>` : ''}
           </div>
-        `).join('')
-        : '<p>Nenhum produto encontrado.</p>';
-    }
+          ${p.ativo === true || p.ativo === 'TRUE' ? '' : '<span class="tag-esgotado">Esgotado</span>'}
+        </a>
+      </div>
+    `).join('')
+    : '<p>Nenhum produto encontrado.</p>';
+}
 
     function filtrar() {
       const b = buscaEl.value.toLowerCase();
@@ -362,3 +364,4 @@
   </script>
 </body>
 </html>
+
